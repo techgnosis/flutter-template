@@ -1,4 +1,0 @@
-# 3. Create your Virtual Device
-echo "no" | ./android-sdk/cmdline-tools/latest/bin/avdmanager create avd \
-    -n "NirvanaDevice" \
-    -k "system-images;android-34;google_apis;x86_64"
