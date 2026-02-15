@@ -1,0 +1,34 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+# 1. Install system dependencies (The "RUN" steps)
+packages:
+  - openjdk-17-jdk-headless
+  - curl
+  - git
+  - unzip
+  - xz-utils
+  - python3
+  - python3-pip
+
+# 2. Run arbitrary commands (The "Complex" setup)
+runcmd:
+  # Install Flutter
+  - git clone https://github.com/flutter/flutter.git -b stable /opt/flutter
+  - ln -s /opt/flutter/bin/flutter /usr/local/bin/flutter
+  # Pre-download artifacts so the agent doesn't wait
+  - flutter doctor
+  # Setup Android CMD tools
+  - mkdir -p /opt/android/cmdline-tools
+  - curl -L https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -o /tmp/cmd.zip
+  - unzip /tmp/cmd.zip -d /opt/android/cmdline-tools
+  - mv /opt/android/cmdline-tools/cmdline-tools /opt/android/cmdline-tools/latest
+
+# 3. Environment Variables (The "ENV" steps)
+write_files:
+  - path: /etc/environment
+    append: true
+    content: |
+      PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/flutter/bin"
+      ANDROID_HOME="/opt/android"
