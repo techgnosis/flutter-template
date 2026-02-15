@@ -20,3 +20,11 @@ use Incus system containers. Much too complicated for OCI containers.
 Just use the 'dir' storage driver for now. I am not doing anything complex.
 
 Don't worry about cloud-init yet either. Record all the steps to get a working environment in this project. Get everything working and then you can cloud-init to automate a working environment
+
+# Android SDK
+NDROID_SDK_ROOT=/opt/android-sdk
+mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools && \
+wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline.zip && \
+unzip cmdline.zip -d ${ANDROID_SDK_ROOT}/cmdline-tools && \
+mv ${ANDROID_SDK_ROOT}/cmdline-tools/cmdline-tools ${ANDROID_SDK_ROOT}/cmdline-tools/latest && \
+rm cmdline.zip
