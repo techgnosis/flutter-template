@@ -15,3 +15,8 @@ adb connect localhost:5555
 scrcpy
 
 use Incus system containers. Much too complicated for OCI containers.
+
+# Incus
+Just use the 'dir' storage driver for now. I am not doing anything complex.
+
+Don't worry about cloud-init yet either. Record all the steps to get a working environment in this project. Get everything working and then you can cloud-init to automate a working environment
