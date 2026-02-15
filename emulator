@@ -1,15 +1,3 @@
-FROM debian:13-slim
-# 1. Download the CLI Tools (The 'Manager')
-RUN wget https://dl.google.com/android/repository/commandlinetools-linux-x86_64.zip
-RUN unzip commandlinetools-linux-*.zip -d ./android-sdk/cmdline-tools/latest
-
-# 2. Use the Manager to pull the specific components
-# This ensures they are placed in the correct folders automatically
-./android-sdk/cmdline-tools/latest/bin/sdkmanager --install \
-    "emulator" \
-    "platform-tools" \
-    "system-images;android-34;google_apis;x86_64"
-
 # 3. Create your Virtual Device
 echo "no" | ./android-sdk/cmdline-tools/latest/bin/avdmanager create avd \
     -n "NirvanaDevice" \
