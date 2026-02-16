@@ -1,29 +1,26 @@
-incus launch images:ubuntu/25.10 android-dev
+incus launch images:ubuntu/25.10 flutter
 
+incus config set flutter security.nesting true
 
-incus config device add android-dev kvm unix-char path=/dev/kvm
+incus config device add flutter kvm unix-char path=/dev/kvm
 
-incus config device add android-dev amdgpu gpu
+incus config device add flutter amdgpu gpu
 
-incus exec android-dev -- mkdir -p /run/user/1000
-
-incus config device add android-dev wayland-socket proxy \
+incus config device add flutter wayland-socket proxy \
 connect=unix:/run/user/1000/wayland-1 \
 listen=unix:/tmp/wayland-0 \
 bind=container \
 uid=1000 gid=1000 \
 mode=0770
 
-# MAYBE
-incus config device remove android-dev wayland-socket
 
-# MAYBE
-incus config set android-dev security.nesting true
+# sometimes to recover when the wayland-0 socket is gone
+incus config device remove flutter wayland-socket
 
 
-incus exec android-dev -- apt update
+incus exec flutter -- apt update
 
-incus exec android-dev -- apt-get install -y \
+incus exec flutter -- apt-get install -y \
 curl \
 wget \
 micro \
@@ -35,10 +32,9 @@ xwayland \
 libegl1 \
 libpulse0
 
-incus exec android-dev -- usermod --append --groups kvm ubuntu
+incus exec flutter -- usermod --append --groups kvm ubuntu
 
-incus exec android-dev -- su - ubuntu
-
+incus exec flutter -- su - ubuntu
 
 
 export ANDROID_HOME=~/android
@@ -47,7 +43,6 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:~/.local/bin
 export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-export XDG_RUNTIME_DIR=/run/user/1000
 export WAYLAND_DISPLAY=/tmp/wayland-0
 export DISPLAY=:0
 
@@ -104,5 +99,4 @@ flutter doctor
 mkdir the_app
 cd the_app
 flutter create --platforms android .
-
-incus file push -r ./scripts android-dev/home/ubuntu/test_app/
+incus file push -r ./scripts android-dev/home/ubuntu/the_app/
