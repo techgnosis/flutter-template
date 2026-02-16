@@ -9,7 +9,7 @@ incus exec android-dev -- mkdir -p /run/user/1000
 
 incus config device add android-dev wayland-socket proxy \
 connect=unix:/run/user/1000/wayland-1 \
-listen=unix:/run/user/1000/wayland-0 \
+listen=unix:/tmp/wayland-0 \
 bind=container \
 uid=1000 gid=1000 \
 mode=0770
@@ -48,7 +48,7 @@ export PATH=$PATH:~/.local/bin
 export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 export XDG_RUNTIME_DIR=/run/user/1000
-export WAYLAND_DISPLAY=wayland-0
+export WAYLAND_DISPLAY=/tmp/wayland-0
 export DISPLAY=:0
 
 curl -fsSL https://claude.ai/install.sh | bash
@@ -85,8 +85,18 @@ adb start-server
 
 Xwayland :0
 
+start a new terminal
+
 emulator \
 -avd flutter_emulator \
 -gpu host \
 -no-audio \
 -no-metrics
+
+start a new terminal
+
+git clone https://github.com/flutter/flutter.git -b stable
+flutter
+flutter config --no-enable-linux-desktop
+flutter config --no-enable-web
+flutter doctor
