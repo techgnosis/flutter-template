@@ -100,3 +100,9 @@ flutter
 flutter config --no-enable-linux-desktop
 flutter config --no-enable-web
 flutter doctor
+
+mkdir the_app
+cd the_app
+flutter create --platforms android .
+
+incus file push -r ./scripts android-dev/home/ubuntu/test_app/
