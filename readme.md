@@ -23,30 +23,14 @@ Don't worry about cloud-init yet either. Record all the steps to get a working e
 
 Just run as root user in the incus container
 
-`sudo incus project switch default`
-`sudo incus project set user-1000 restricted=false`
-`incus config device add flutter kvm unix-char path=/dev/kvm`
-`incus config device add flutter amdgpu gpu`
-`incus config set flutter security.nesting true`
 
 
 
 
-# apt
-```
-apt-get update
-apt-get install -y \
-curl \
-wget \
-git \
-unzip \
-xz-utils \
-openjdk-17-jdk \
-xvfb
-```
+
 
 # bash
-export BOT=true
+
 export ANDROID_HOME=~/android
 export PATH=$PATH:~/flutter/bin
 export PATH=$PATH:$ANDROID_HOME/emulator/
@@ -97,8 +81,12 @@ emulator -list-avds
 
 adb start-server
 
-xvfb :1 -screen 0 1920x1080x24 &
-DISPLAY=:1 emulator -avd flutter_emulator -gpu host -no-audio -no-metrics -no-window &>/dev/null &
+emulator \
+-avd flutter_emulator \
+-gpu host \
+-no-audio \
+-no-metrics
+
 
 adb devices
 
@@ -114,3 +102,17 @@ This will download the Dart SDK on the first run
 `flutter config --no-enable-web`
 
 `flutter doctor`
+
+# Claude notes
+
+
+`incus exec flutter -- mkdir -p /run/user/0`
+
+```
+incus config device add flutter wayland-socket proxy \
+connect=unix:/run/user/1000/wayland-1 \
+listen=unix:/run/user/1000/wayland-0 \
+bind=container \
+uid=1000 gid=1000 \
+mode=0770
+```
